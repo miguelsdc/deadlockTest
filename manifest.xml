@@ -1,0 +1,15 @@
+<package>
+  <description brief="deadlockTest">
+
+     Testing for deadlock in action lib
+
+  </description>
+  <author>Miguel Sarabia</author>
+  <license>BSD</license>
+  <review status="unreviewed" notes="simple_action_server_test"/>
+  <depend package="roscpp"/>
+  <depend package="rospy"/>
+  <depend package="actionlib"/>
+</package>
+
+

@@ -1,0 +1,16 @@
+<launch>
+  <group ns="$(anon brutal_test)"> 
+    <!--Launch our action server -->
+    <node pkg="deadlockTest" type="sas.py" name="deadlockTestServer" required="true" output="screen">
+        <param name="~frequency" value="5.0" />
+    </node>
+    
+    <!--Launch our program -->
+    <node pkg="deadlockTest" type="deadlockTest" name="deadlockTestClient1" required="true" output="screen"/>
+    <node pkg="deadlockTest" type="deadlockTest" name="deadlockTestClient2" required="true" output="screen"/>
+    <node pkg="deadlockTest" type="deadlockTest" name="deadlockTestClient3" required="true" output="screen"/>
+    <node pkg="deadlockTest" type="deadlockTest" name="deadlockTestClient4" required="true" output="screen"/>
+    <node pkg="deadlockTest" type="deadlockTest" name="deadlockTestClient5" required="true" output="screen"/>
+  </group>
+      
+</launch>

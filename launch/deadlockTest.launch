@@ -1,0 +1,12 @@
+<launch>
+  <group ns="$(anon simple_test)">
+    <!--Launch our action server -->
+    <node pkg="deadlockTest" type="sas.py" name="deadlockTestServer" required="true" output="screen">
+        <param name="~frequency" value="5.0" />
+    </node>
+    
+    <!--Launch our program -->
+    <node pkg="deadlockTest" type="deadlockTest" name="deadlockTestClient" required="true" output="screen"/>
+  </group>
+      
+</launch>
