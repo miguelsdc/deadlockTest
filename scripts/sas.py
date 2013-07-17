@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-
+# -*- coding: utf-8 -*-
 #
 # Copyright (c) 2013 Miguel Sarabia del Castillo
 # Imperial College London
@@ -41,7 +41,7 @@ class SAS():
 
     def __init__(self):
         # ROS initialization:
-        rospy.init_node(self.NODE_NAME)      
+        rospy.init_node(self.NODE_NAME, log_level=rospy.DEBUG)      
         
         #Parameters
         self.preempted = False
@@ -63,7 +63,7 @@ class SAS():
 
     def execute_action(self, goal):
 
-        rospy.loginfo("Executing new action")
+        rospy.loginfo("──> Executing new action")
 
         # Create new async thread to deal with request
         with self.lock:
@@ -71,40 +71,47 @@ class SAS():
             thread = threading.Thread(target = self.run )
             thread.start()
         
+        rospy.loginfo("──> Waiting for action to finish")
+
         #Wait for thread to finish
         thread.join()
         
+        rospy.loginfo("──> Cleaning up for next iteration")
+
         ##Clean up for next iteration before finishing this goal
         with self.lock:
             self.preempted = False
 
         #Prepare results
+        rospy.loginfo("──> Preparing results")
         result = CountdownResult()
         result.remaining = self.countdown
         
                     
         #Evaluate results
         if result.remaining < 0:
-            rospy.logerr("Code should never reach this point")
+            rospy.logerr("──> Code should never reach this point")
             self.action_server.set_aborted(result)
         
         elif self.preempted :
-            rospy.loginfo("Action preempted")
+            rospy.loginfo("──> Action preempted")
             self.action_server.set_preempted(result)
         
         else :
-            rospy.loginfo("Action finished")
+            rospy.loginfo("──> Action finished")
             self.action_server.set_succeeded(result)
     
     
     def stop_action(self):
+        rospy.loginfo("──> Preempting action")
         with self.lock:
             self.preempted = True
+        rospy.loginfo("──> Preempted!")
     
     
     def run(self):
         while self.countdown > 0 and not self.preempted and not rospy.is_shutdown():
-            rospy.loginfo("Counting down from {}".format(self.countdown))
+            rospy.loginfo("*** Counting down from {} ***".format(self.countdown))
             self.countdown -= 1
             self.countdown_rate.sleep()
 
